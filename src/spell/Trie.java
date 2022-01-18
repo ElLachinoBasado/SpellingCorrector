@@ -77,7 +77,7 @@ public class Trie implements ITrie{
 
     @Override
     public INode find(String word) {
-        char[] charArray = convertString(word); //creates an array of chars from the word
+        /**char[] charArray = convertString(word); //creates an array of chars from the word
         int[] intArray = convertCharArray(charArray); // creates an array of ints corresponding to ascii
 
         int i = 0;
@@ -100,7 +100,15 @@ public class Trie implements ITrie{
         }
 
         if (foundNull) {return null;}
-        else {return nodeToCheck;}
+        else {return nodeToCheck;} **/
+        TrieNode current = root;
+        word = word.toLowerCase();
+        for (int i = 0; i < word.length(); i++) {
+            if (current.getChildren()[word.charAt(i)-97] == null) return null;
+            else current = (TrieNode) current.getChildren()[word.charAt(i)-97];
+        }
+        if (current.getValue() > 0) return current;
+        else return null;
     }
 
     @Override

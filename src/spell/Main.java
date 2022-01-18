@@ -24,14 +24,13 @@ public class Main {
 		
 		corrector.useDictionary(dictionaryFileName);
 
-		/**
 		String suggestion = corrector.suggestSimilarWord(inputWord);
 		if (suggestion == null) {
 		    suggestion = "No similar word found";
 		}
 		
 		System.out.println("Suggestion is: " + suggestion);
-		 **/
+
 	}
 
 }
