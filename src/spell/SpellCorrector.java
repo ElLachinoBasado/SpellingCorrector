@@ -56,27 +56,78 @@ public class SpellCorrector implements ISpellCorrector {
     }
 
     private void deletionDistance(String inputWord, Set<String> possibleWords) {
-
+        for (int i = 0; i < inputWord.length(); i++) {
+            StringBuilder toAdd = new StringBuilder(inputWord);
+            toAdd.deleteCharAt(i);
+            possibleWords.add(toAdd.toString());
+        }
     }
     private void transpositionDistance(String inputWord, Set<String> possibleWords) {
-
+        for (int i = 0; i < inputWord.length() - 1; i++) {
+            StringBuilder toAdd = new StringBuilder(inputWord);
+            toAdd = swapCharacter(toAdd,i,i+1);
+            possibleWords.add(toAdd.toString());
+        }
     }
+
     private StringBuilder swapCharacter(StringBuilder word, int i, int j) {
-        return null;
+        char iChar = word.charAt(i);
+        char jChar = word.charAt(j);
+        word.setCharAt(i,jChar);
+        word.setCharAt(j,iChar);
+        return word;
     }
-    private void alterationDistance(String inputWord, Set<String> possibleWords) {
 
+    private void alterationDistance(String inputWord, Set<String> possibleWords) {
+        for (int i = 0; i < inputWord.length(); i++) {
+            for (char j = 'a'; j <= 'z'; j++) {
+                StringBuilder toAdd = new StringBuilder(inputWord);
+                toAdd.setCharAt(i,j);
+                possibleWords.add(toAdd.toString());
+            }
+        }
     }
+
     private void insertionDistance(String inputWord, Set<String> possibleWords) {
-            //for (char j = a; j <= z; ++j)
+        for (char c = 'a'; c <= 'z'; c++) {
+            StringBuilder toAdd = new StringBuilder(inputWord + c);
+            possibleWords.add(toAdd.toString());
+            toAdd = new StringBuilder(c + inputWord);
+            possibleWords.add(toAdd.toString());
+        }
+
+        for (int i = 0; i < inputWord.length()-1; i++) {
+            for (char c = 'a'; c <= 'z'; c++) {
+                StringBuilder toAdd = new StringBuilder(inputWord.substring(0,i+1) + c + inputWord.substring(i+1,inputWord.length()));
+                possibleWords.add(toAdd.toString());
+            }
+        }
     }
+
 
     private Set<String> findRealWords (Set<String> possibleWords) { //return new set that contains values from possibleWords that are also found in dictionary
-        return null;
+        Set<String> realWords = new TreeSet<>();
+        for (String nextCandidate : possibleWords) {
+            if (dictionary.find(nextCandidate) != null) {
+                realWords.add(nextCandidate);
+            }
+        }
+        return realWords;
     }
 
     private String breakTie(Set<String> possibleWords) {
-        String similarWord = "";
-        return similarWord;
+        StringBuilder mostSimilar = new StringBuilder();
+        int[] setOfCounts = new int[possibleWords.size()];
+
+        int currentHighest = 0;
+        for (String candidate : possibleWords) {
+            int currentCandidateCount = dictionary.find(candidate).getValue();
+            if (currentCandidateCount > currentHighest) {
+                currentHighest = currentCandidateCount;
+                mostSimilar = new StringBuilder(candidate);
+            }
+        }
+
+        return mostSimilar.toString();
     }
 }
